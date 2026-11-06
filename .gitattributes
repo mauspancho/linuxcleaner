@@ -1,0 +1,8 @@
+# Normaliza los finales de línea y mejora el resaltado en GitHub/GitLab.
+* text=auto eol=lf
+
+*.sh text eol=lf
+*.rules text eol=lf linguist-language=JavaScript linguist-detectable=true
+
+# Los binarios descargados por scripts/bootstrap-tools.sh no se versionan.
+.tools/** -text

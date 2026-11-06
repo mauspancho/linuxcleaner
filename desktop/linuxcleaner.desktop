@@ -1,0 +1,16 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=LinuxCleaner
+Name[es]=LinuxCleaner
+GenericName=System Cleaner
+GenericName[es]=Limpiador del sistema
+Comment=Free disk space by cleaning package caches, orphan packages and old logs
+Comment[es]=Libera espacio limpiando cachés de paquetes, paquetes huérfanos y registros antiguos
+Exec=/usr/local/bin/linuxcleaner
+TryExec=/usr/local/bin/linuxcleaner
+Icon=linuxcleaner
+Terminal=false
+Categories=System;
+Keywords=clean;cleaner;cache;disk;space;limpiar;limpieza;caché;espacio;
+StartupNotify=true

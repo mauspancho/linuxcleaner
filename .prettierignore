@@ -1,0 +1,6 @@
+.tools/
+node_modules/
+package-lock.json
+dist/
+*.bak
+*.bak.*

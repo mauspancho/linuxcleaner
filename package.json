@@ -1,0 +1,23 @@
+{
+  "name": "linuxcleaner",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Utilidad de mantenimiento para Linux con Bash, Zenity y PolicyKit",
+  "type": "module",
+  "engines": {
+    "node": "^20.19.0 || ^22.13.0 || >=24"
+  },
+  "scripts": {
+    "check": "PATH=\"$PWD/.tools/bin:$PATH\" ./scripts/check.sh --strict",
+    "format": "PATH=\"$PWD/.tools/bin:$PATH\" ./scripts/format.sh",
+    "test": "./tests/smoke.sh",
+    "scan": "./cleaner.sh --scan",
+    "lint:rules": "eslint \"polkit/**/*.rules\"",
+    "format:rules": "prettier --write \"polkit/**/*.rules\"",
+    "validate:rules": "node scripts/validate-rules.mjs polkit/*.rules"
+  },
+  "devDependencies": {
+    "eslint": "^10.14.0",
+    "prettier": "^3.9.10"
+  }
+}

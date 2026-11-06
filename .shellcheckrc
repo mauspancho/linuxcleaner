@@ -1,0 +1,8 @@
+# Configuración de ShellCheck para todos los scripts del proyecto.
+shell=bash
+external-sources=true
+source-path=SCRIPTDIR
+enable=all
+# Las condiciones y los valores por defecto de estas comprobaciones son
+# intencionados; no indican un error de manejo de set -e.
+disable=SC2310,SC2312

@@ -1,0 +1,63 @@
+/*
+ * LinuxCleaner - regla de autorización de PolicyKit.
+ *
+ * Permite que los miembros de los grupos administrativos ejecuten únicamente
+ * el modo privilegiado de LinuxCleaner sin introducir la contraseña cada vez.
+ *
+ * La regla comprueba de forma estricta:
+ *   - Que la acción sea la de pkexec (org.freedesktop.policykit.exec).
+ *   - La ruta canónica exacta del programa instalado.
+ *   - La línea de comandos exacta, incluido el argumento --privileged-clean.
+ *   - Que la sesión sea local y esté activa.
+ *
+ * Cualquier otra invocación de pkexec no coincide con esta regla y sigue el
+ * flujo normal de autenticación de PolicyKit.
+ *
+ * Importante: polkit evalúa este archivo con duktape, no con un motor
+ * JavaScript moderno. Por eso se usa únicamente sintaxis ES5 (var, function)
+ * y se evitan let/const, funciones flecha y plantillas de texto.
+ */
+(function () {
+    var PROGRAM = "/usr/local/bin/linuxcleaner";
+    var COMMAND_LINE = "/usr/local/bin/linuxcleaner --privileged-clean";
+    var ADMIN_GROUPS = ["wheel", "sudo", "admin"];
+
+    function isAdministrator(subject) {
+        var index;
+
+        for (index = 0; index < ADMIN_GROUPS.length; index += 1) {
+            if (subject.isInGroup(ADMIN_GROUPS[index])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    polkit.addRule(function (action, subject) {
+        if (action.id !== "org.freedesktop.policykit.exec") {
+            return polkit.Result.NOT_HANDLED;
+        }
+
+        // pkexec publica estos detalles a partir del programa que va a ejecutar.
+        if (action.lookup("program") !== PROGRAM) {
+            return polkit.Result.NOT_HANDLED;
+        }
+
+        if (action.lookup("command_line") !== COMMAND_LINE) {
+            return polkit.Result.NOT_HANDLED;
+        }
+
+        if (!subject.local || !subject.active) {
+            return polkit.Result.NOT_HANDLED;
+        }
+
+        if (isAdministrator(subject)) {
+            return polkit.Result.YES;
+        }
+
+        // Un usuario que no pertenece a los grupos administrativos debe
+        // autenticarse como administrador.
+        return polkit.Result.AUTH_ADMIN;
+    });
+})();

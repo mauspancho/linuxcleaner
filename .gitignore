@@ -1,0 +1,15 @@
+# Dependencias y herramientas locales
+.tools/
+node_modules/
+dist/
+
+# Copias de seguridad y archivos temporales
+*.bak
+*.bak.*
+*.tmp
+*.swp
+*~
+
+# Entornos de escritorio
+.DS_Store
+Thumbs.db
